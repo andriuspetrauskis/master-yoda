@@ -57,16 +57,18 @@ repo.getLeastCheckedSummoners().then(function (documents) {
  * A fallback to old servers
  */
 function unwrap (promises) {
-    if ('undefined' !== typeof Promise.all) {
+    if ('undefined' !== typeof Promise) {
         return Promise.all(promises);
     }
 
     var results = [];
     var total = promises.length;
     for (var i = 0; i < total; i++) {
-        var promise = promises[i];
-        var last = promise.then(function (result) {
+        var last = promises[i].then(function (result) {
             results.push(result);
+            if ('undefined' !== typeof promises[i+1]) {
+                return promises[i+1];
+            }
             return results;
         }, function (error) {
             console.log(error);
