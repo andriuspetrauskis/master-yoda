@@ -43,10 +43,10 @@ module.exports = {
         'This account is already linked\nTry `/lol status`'
     ]),
     league_free_for: new Text([
-        'Well done my padawan\nI can see you are League-free for '
+        'Well done my padawan\nI can see you are League-free for $time'
     ]),
     stopped_playing_league_ago: new Text([
-        'Great job @$user, you stopped playing League '
+        'Great job @$user, you stopped playing League $time ago'
     ]),
     user_is_not_playing_public: new Text([
         '@$user is not playing League for $time!\nYou are doing well, @$user, keep up!'
@@ -81,5 +81,8 @@ module.exports = {
         'To link an account you need to type `/lol link REGION summoner_name`\n' +
         'REGION - being name of server you were (hopefully) playing - na, euw, eune etc.\n' +
         'summoner_name - this is the account name others see you in game and NOT the name you login with'
+    ]),
+    summoner_not_found: new Text([
+        'Summoner found not'
     ])
 };

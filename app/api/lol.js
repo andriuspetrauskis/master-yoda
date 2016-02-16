@@ -6,6 +6,7 @@ var repo = require('../repositories/lol.js');
 var text = require('../helpers/text.js');
 
 var self = module.exports = {
+    known_servers: ['na', 'eune', 'euw', 'br', 'kr', 'lan', 'las', 'oce', 'ru', 'tr'],
     output: null,
     send: function (text, publicly) {
         self.output.json({
@@ -44,7 +45,7 @@ var self = module.exports = {
             if (-1 !== err.message.indexOf('403')) {
                 throw new Error(text.could_not_access_api);
             }
-            throw new Error('Summoner found not');
+            throw new Error(text.summoner_not_found);
         }).then(function (summonerData) {
             self.data = summonerData[player];
             return repo.getSummonerCount(server, self.data.id);
@@ -56,7 +57,7 @@ var self = module.exports = {
             return repo.addSummoner(user, server, self.data.id, self.data.revisionDate);
         }).then(function () {
             var freeFor = moment(self.data.revisionDate).fromNow(true);
-            self.send(text.league_free_for + freeFor);
+            self.send(text.league_free_for.vars('$time', freeFor));
         }).catch(function (err){
             self.send(err.message);
         });
@@ -68,11 +69,10 @@ var self = module.exports = {
                 return item.lastGame;
             });
             var last = Math.max.apply(null, dates);
+            var time = moment(last).fromNow(true);
             if ('me' === privatelly) {
-                var ago = moment(last).fromNow();
-                self.send(text.stopped_playing_league_ago.vars('$user', user) + ago);
+                self.send(text.stopped_playing_league_ago.vars({$user: user, $time: time }));
             } else {
-                var time = moment(last).fromNow(true);
                 self.send(text.user_is_not_playing_public.vars({$user: user, $time: time}), true);
             }
         }).catch(function () {
@@ -101,7 +101,7 @@ var self = module.exports = {
         if ('undefined' === typeof server) {
             throw new Error(text.empty_server);
         }
-        if (-1 === ['na', 'eune', 'euw', 'br', 'kr', 'lan', 'las', 'oce', 'ru', 'tr'].indexOf(server.toLowerCase())) {
+        if (-1 === self.known_servers.indexOf(server.toLowerCase())) {
             throw new Error(text.unknown_server);
         }
     }
