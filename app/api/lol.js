@@ -50,7 +50,7 @@ var self = module.exports = {
             }
             throw new Error(text.summoner_not_found);
         }).then(function (summonerData) {
-            self.data = summonerData[player];
+            self.data = summonerData[player.replace(/ /g, '')];
             return repo.getSummonerCount(server, self.data.id);
         }).then(function (count) {
             if (count > 0) {
