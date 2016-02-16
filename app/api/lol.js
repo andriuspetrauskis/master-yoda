@@ -9,6 +9,9 @@ var self = module.exports = {
     known_servers: ['na', 'eune', 'euw', 'br', 'kr', 'lan', 'las', 'oce', 'ru', 'tr'],
     output: null,
     send: function (text, publicly) {
+        if ('string' !== typeof text) {
+            text = text.toString();
+        }
         self.output.json({
             response_type: publicly?'in_channel':'ephemeral',
             text: text,
