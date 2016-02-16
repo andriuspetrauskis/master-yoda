@@ -3,6 +3,7 @@
 var rp = require('request-promise');
 var moment = require('moment');
 var repo = require('../repositories/lol.js');
+var text = require('../helpers/text.js');
 
 var self = module.exports = {
     output: null,
@@ -19,7 +20,7 @@ var self = module.exports = {
     },
     check: function (params) {
         if ('undefined' === typeof params.text) {
-            throw new Error('Oops, someone broke Slack :(');
+            throw new Error(text.empty_content);
         }
         // to do: add check for token
     },
@@ -36,7 +37,7 @@ var self = module.exports = {
     'link': function (server, user, player) {
         self.checkServer(server);
         if ('undefined' === typeof server || 'undefined' === typeof player) {
-            throw Error('Bahaha very funny, now do it proper way!');
+            throw Error(text.bad_server_or_username);
         }
         server = server.toLowerCase();
         player = player.toLowerCase();
@@ -46,7 +47,7 @@ var self = module.exports = {
             return JSON.parse(text);
         }, function failed(err) {
             if (-1 !== err.message.indexOf('403')) {
-                throw new Error('Grumps, I cannot look at LoL servers now, please try again later');
+                throw new Error(text.could_not_access_api);
             }
             throw new Error('Summoner found not');
         }).then(function (summonerData) {
@@ -54,13 +55,13 @@ var self = module.exports = {
             return repo.getSummonerCount(server, self.data.id);
         }).then(function (count) {
             if (count > 0) {
-                throw new Error('This account is already linked\nTry `/lol status`');
+                throw new Error(text.account_already_linked);
             }
         }).then(function () {
             return repo.addSummoner(user, server, self.data.id, self.data.revisionDate);
         }).then(function () {
             var freeFor = moment(self.data.revisionDate).fromNow(true);
-            self.send('Well done my padawan\nI can see you are League-free for ' + freeFor);
+            self.send(text.league_free_for + freeFor);
         }).catch(function (err){
             self.send(err.message);
         });
@@ -74,38 +75,39 @@ var self = module.exports = {
             var last = Math.max.apply(null, dates);
             if ('me' === privatelly) {
                 var ago = moment(last).fromNow();
-                self.send('Great job @' + user + ', you stopped playing League ' + ago);
+                self.send(text.stopped_playing_league_ago.vars('$user', user) + ago);
             } else {
                 var time = moment(last).fromNow(true);
-                self.send('@' + user + ' is not playing League for '+ time +
-                        '!\nYou are doing well, @' + user + ', keep up!',
-                    true
-                );
+                self.send(text.user_is_not_playing_public.vars({$user: user, $time: time}), true);
             }
         }).catch(function () {
-            self.send('You have no accounts I know\nTry to `/lol link REGION account_name`');
+            self.send(text.no_linked_accounts);
         });
     },
 
     top: function () {
         repo.getTopUsers(3).then(function (documents) {
-            var text = 'Congrats our top Jedi who are with light: \n';
+            var result = text.top_list_header;
             documents.map(function (doc, index) {
-                text += '#' + (index+1) + ': @' + doc._id + ' for ' + moment(doc.date).fromNow(true) + '\n';
+                result += text.top_list_template.vars({
+                    $no: index+1,
+                    $user: doc._id,
+                    $time: moment(doc.date).fromNow(true)
+                });
             });
-            text += 'May the force be with you!';
-            self.send(text, true);
+            result += text.top_list_footer;
+            self.send(result, true);
         }).catch(function () {
-            self.send('Sorry no top Jedi');
+            self.send(text.top_list_empty);
         });
     },
 
     checkServer: function(server) {
         if ('undefined' === typeof server) {
-            throw new Error('I understand not\nType /help');
+            throw new Error(text.empty_server);
         }
         if (-1 === ['na', 'eune', 'euw', 'br', 'kr', 'lan', 'las', 'oce', 'ru', 'tr'].indexOf(server.toLowerCase())) {
-            throw new Error('Sorry, I know no such region\nThe Empire may destroyed it');
+            throw new Error(text.unknown_server);
         }
     }
 };
