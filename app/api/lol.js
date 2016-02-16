@@ -146,7 +146,7 @@ var self = module.exports = {
 
     checkServer: function(server) {
         if ('undefined' === typeof server) {
-            throw new Error('Me not understand You\nType /help');
+            throw new Error('I understand not\nType /help');
         }
         if (-1 === ['na', 'eune', 'euw', 'br', 'kr', 'lan', 'las', 'oce', 'ru', 'tr'].indexOf(server.toLowerCase())) {
             throw new Error('Sorry, I know no such region\nThe Empire may destroyed it');
