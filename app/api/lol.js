@@ -6,6 +6,14 @@ var repo = require('../repositories/lol.js');
 
 var self = module.exports = {
     output: null,
+    send: function (text, publicly) {
+        self.output.json({
+            response_type: publicly?'in_channel':'ephemeral',
+            text: text,
+            parse: 'full',
+            link_names: true
+        });
+    },
     setOutput: function (output) {
         self.output = output;
     },
@@ -33,7 +41,8 @@ var self = module.exports = {
         server = server.toLowerCase();
         player = player.toLowerCase();
         rp('https://' + server + '.api.pvp.net/api/lol/' + server + '/v1.4/summoner/by-name/' + player +
-            '?api_key=' + process.env.LOL_KEY).then(function (text) {
+            '?api_key=' + process.env.LOL_KEY
+        ).then(function (text) {
             return JSON.parse(text);
         }, function failed(err) {
             if (-1 !== err.message.indexOf('403')) {
@@ -51,9 +60,9 @@ var self = module.exports = {
             return repo.addSummoner(user, server, self.data.id, self.data.revisionDate);
         }).then(function () {
             var freeFor = moment(self.data.revisionDate).fromNow(true);
-            self.output.send('Well done my padawan\nI can see you are League-free for ' + freeFor);
+            self.send('Well done my padawan\nI can see you are League-free for ' + freeFor);
         }).catch(function (err){
-            self.output.send(err.message);
+            self.send(err.message);
         });
     },
 
@@ -65,19 +74,16 @@ var self = module.exports = {
             var last = Math.max.apply(null, dates);
             if ('me' === privatelly) {
                 var ago = moment(last).fromNow();
-                self.output.send('Great job @' + user + ', you stopped playing League ' + ago);
+                self.send('Great job @' + user + ', you stopped playing League ' + ago);
             } else {
                 var time = moment(last).fromNow(true);
-                self.output.json({
-                    response_type: "in_channel",
-                    text: '@' + user + ' is not playing League for '+ time +
+                self.send('@' + user + ' is not playing League for '+ time +
                         '!\nYou are doing well, @' + user + ', keep up!',
-                    parse: 'full',
-                    link_names: true
-                });
+                    true
+                );
             }
         }).catch(function () {
-            self.output.send('You have no accounts I know\nTry to `/lol link REGION account_name`');
+            self.send('You have no accounts I know\nTry to `/lol link REGION account_name`');
         });
     },
 
@@ -88,15 +94,9 @@ var self = module.exports = {
                 text += '#' + (index+1) + ': @' + doc._id + ' for ' + moment(doc.date).fromNow(true) + '\n';
             });
             text += 'May the force be with you!';
-            self.output.json(
-                {
-                    response_type: "in_channel",
-                    text: text,
-                    parse: 'full'
-                }
-            );
+            self.send(text, true);
         }).catch(function () {
-            self.output.send('Sorry no top Jedi');
+            self.send('Sorry no top Jedi');
         });
     },
 
