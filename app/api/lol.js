@@ -76,6 +76,9 @@ var self = module.exports = {
             if ('me' === privatelly) {
                 self.send(text.stopped_playing_league_ago.vars({$user: user, $time: time }));
             } else {
+                if (-1 !== ['seconds', 'minutes', 'hours', 'days', 'months', 'years'].indexOf(privatelly)) {
+                    time = moment().diff(last, privatelly) + ' ' + privatelly;
+                }
                 self.send(text.user_is_not_playing_public.vars({$user: user, $time: time}), true);
             }
         }).catch(function () {
