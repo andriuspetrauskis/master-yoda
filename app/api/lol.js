@@ -1,8 +1,8 @@
 'use strict';
 
-var db = require('../db.js')();
 var rp = require('request-promise');
 var moment = require('moment');
+var repo = require('../repositories/lol.js');
 
 var self = module.exports = {
     output: null,
@@ -42,37 +42,13 @@ var self = module.exports = {
             throw new Error('Summoner found not');
         }).then(function (summonerData) {
             self.data = summonerData[player];
-            return db.collection('lol').count({
-                'summoners.id': self.data.id,
-                'summoners.server': server
-            });
+            return repo.getSummonerCount(server, self.data.id);
         }).then(function (count) {
             if (count > 0) {
                 throw new Error('This account is already linked\nTry `/lol status`');
             }
         }).then(function () {
-            return db.collection('lol').count({ name: user });
-        }).then(function (count) {
-            var summoner = {
-                id: self.data.id,
-                server: server,
-                lastGame: self.data.revisionDate,
-                lastCheck: new Date().getTime()
-            };
-            if (count > 0) {
-                return db.collection('lol').update({ name: user }, {
-                    '$push': {
-                        summoners: summoner
-                    }
-                });
-            } else {
-                return db.collection('lol').insert({
-                    name: user,
-                    summoners: [
-                        summoner
-                    ]
-                });
-            }
+            return repo.addSummoner(user, server, self.data.id, self.data.revisionDate);
         }).then(function () {
             var freeFor = moment(self.data.revisionDate).fromNow(true);
             self.output.send('Well done my padawan\nI can see you are League-free for ' + freeFor);
@@ -82,7 +58,7 @@ var self = module.exports = {
     },
 
     'status': function (user, privatelly) {
-        db.collection('lol').find({ name: user }).limit(1).then(function(object) {
+        repo.getUser(user).then(function(object) {
             var dates = object[0].summoners.map(function (item) {
                 return item.lastGame;
             });
@@ -106,27 +82,7 @@ var self = module.exports = {
     },
 
     top: function () {
-        db.collection('lol').aggregate(
-            {
-                $unwind: '$summoners'
-            },
-            {
-                $group: {
-                    _id: '$name',
-                    date: {
-                        $max: '$summoners.lastGame'
-                    }
-                }
-            },
-            {
-                $sort: {
-                    'date': 1
-                }
-            },
-            {
-                $limit: 3
-            }
-        ).then(function (documents) {
+        repo.getTopUsers(3).then(function (documents) {
             var text = 'Congrats our top Jedi who are with light: \n';
             documents.map(function (doc, index) {
                 text += '#' + (index+1) + ': @' + doc._id + ' for ' + moment(doc.date).fromNow(true) + '\n';

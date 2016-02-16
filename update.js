@@ -1,32 +1,12 @@
 // This is update file, be sure to run periodically e.g. each hour.
 'use strict';
 
-var db = require('./app/db.js')();
 var rp = require('request-promise');
+var repo = require('./app/repositories/lol.js');
 
 console.log('starting update');
 
-db.collection('lol').aggregate(
-    {
-        $unwind: '$summoners'
-    },
-    {
-        $group: {
-            _id : '$summoners.server',
-            ids: {
-                $push: '$summoners.id'
-            },
-            checked: {
-                $push: '$summoners.lastCheck'
-            }
-        }
-    },
-    {
-        $sort: {
-            'checked': 1
-        }
-    }
-).then(function (documents) {
+repo.getLeastCheckedSummoners().then(function (documents) {
     var limit = 40; // how much summoner ids we can pass in one request
     var requestPool = [];
     documents.forEach(function (document) {
@@ -58,15 +38,7 @@ db.collection('lol').aggregate(
             if ('status' !== key && 'server' !== key) {
                 var data = response[key];
                 console.log('updating ' + key);
-                updatePool.push(db.collection('lol').update({
-                    'summoners.server': response.server,
-                    'summoners.id': data.id
-                }, {
-                    $set: {
-                        'summoners.$.lastCheck': new Date().getTime(),
-                        'summoners.$.lastGame': data.revisionDate
-                    }
-                }));
+                updatePool.push(repo.updateSummonerDate(response.server, data.id, data.revisionDate))
             }
         }
     });
