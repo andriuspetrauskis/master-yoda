@@ -55,13 +55,29 @@ module.exports = {
         'You have no accounts I know\nTry to `/lol link REGION account_name`'
     ]),
     top_list_header: new Text([
-        'Congrats our top Jedi who are with light: \n'
+        'Congrats our top Jedi who are with light: \n',
+        'Best Jedi known around: \n',
+        'The Force is strong in these: \n',
+        'Best of the best: \n'
     ]),
     top_list_footer: new Text([
-        'May the force be with you!'
+        'May the force be with you!',
+        'Feel the force!',
+        'Do. Or do not. There is no try.',
+        'Wars not make one great.',
+        'Adventure. Excitement. A Jedi craves not these things.',
+        'Not if anything to say about it I have',
+        'Through the Force, things you will see. Other places. The future…the past. Old friends long gone.',
+        'Once you start down the dark path, forever will it dominate your destiny, consume you it will.',
+        'Hmm. In the end, cowards are those who follow the dark side.'
     ]),
     top_list_template: new Text([
-        '#$no: @$user for $time\n'
+        '#$no: @$user for $time\n',
+        '#$no: @$user stopped playing $time ago\n',
+        '#$no: $time on our side @$user is\n',
+        '#$no: @$user is counting $time\n',
+        '#$no: for $time @$user\n',
+        '#$no: $time ago @$user joined us\n'
     ]),
     top_list_empty: new Text([
         'Sorry no top Jedi'
