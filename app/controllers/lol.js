@@ -21,7 +21,7 @@ module.exports = {
                     lol.top();
                     break;
                 default:
-                    res.send(lol.helpText);
+                    lol.help();
             }
         } catch (e) {
             res.send(e.message);

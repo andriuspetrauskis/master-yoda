@@ -71,5 +71,15 @@ module.exports = {
     ]),
     unknown_server: new Text([
         'Sorry, I know no such region\nThe Empire may destroyed it'
+    ]),
+    help_text: new Text([
+        'You can link your LoL account to this chat room to track days you quit League\n' +
+        'Other users will not see your LoL username\n' +
+        'Other users will see how many days ago you stopped playing\n' +
+        'When you type `/lol status`\n' +
+        'However, if you want to see it by yourself only, type `/lol status me`\n' +
+        'To link an account you need to type `/lol link REGION summoner_name`\n' +
+        'REGION - being name of server you were (hopefully) playing - na, euw, eune etc.\n' +
+        'summoner_name - this is the account name others see you in game and NOT the name you login with'
     ])
 };
