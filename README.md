@@ -1,0 +1,1 @@
+Quit LoL simple backend for Slack integrations

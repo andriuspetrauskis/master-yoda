@@ -1,0 +1,12 @@
+{
+  "name": "node-authentication",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "~4.0.0",
+    "moment": "^2.11.2",
+    "promised-mongo": "~1.2.0",
+    "request-promise": "~2.0.0"
+  },
+  "devDependencies": {}
+}
