@@ -30,7 +30,7 @@ repo.getLeastCheckedSummoners().then(function (documents) {
             }
         }
     });
-    return Promise.all(requestPool);
+    return unwrap(requestPool);
 }).then(function (responses) {
     var updatePool = [];
     responses.forEach(function (response) {
@@ -42,7 +42,7 @@ repo.getLeastCheckedSummoners().then(function (documents) {
             }
         }
     });
-    return Promise.all(updatePool);
+    return unwrap(updatePool);
 }, function onRequestFail(err) {
     console.error(err);
 }).then(function () {
@@ -52,3 +52,29 @@ repo.getLeastCheckedSummoners().then(function (documents) {
     console.error(err);
     process.exit(1);
 });
+
+/**
+ * A fallback to old servers
+ */
+function unwrap (promises) {
+    if ('undefined' !== typeof Promise.all) {
+        return Promise.all(promises);
+    }
+
+    var results = [];
+    var total = promises.length;
+    for (var i = 0; i < total; i++) {
+        var promise = promises[i];
+        var last = promise.then(function (result) {
+            results.push(result);
+            return results;
+        }, function (error) {
+            console.log(error);
+            return results;
+        }).catch(function (error) {
+            console.log(error)
+        });
+    }
+
+    return last;
+}
