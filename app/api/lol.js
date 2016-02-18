@@ -60,7 +60,7 @@ var self = module.exports = {
             return repo.addSummoner(user, server, self.data.id, self.data.revisionDate);
         }).then(function () {
             var freeFor = moment(self.data.revisionDate).fromNow(true);
-            self.send(text.league_free_for.vars('$time', freeFor));
+            self.send(text.league_free_for_linked.vars('$time', freeFor));
         }).catch(function (err){
             self.send(err.message);
         });
@@ -74,15 +74,29 @@ var self = module.exports = {
             var last = Math.max.apply(null, dates);
             var time = moment(last).fromNow(true);
             if ('me' === privatelly) {
-                self.send(text.stopped_playing_league_ago.vars({$user: user, $time: time }));
+                var privateText = text.league_free_for_short_private;
+                if (+moment().diff(last, 'hours') > 24) {
+                    privateText = text.league_free_for_average_private;
+                }
+                if (+moment().diff(last, 'days') > 40) {
+                    privateText = text.league_free_for_long_private;
+                }
+                self.send(privateText.vars({$user: user, $time: time }));
             } else {
+                var publicText = text.league_free_for_short_public;
+                if (+moment().diff(last, 'hours') > 24) {
+                    publicText = text.league_free_for_average_public;
+                }
+                if (+moment().diff(last, 'days') > 30) {
+                    publicText = text.league_free_for_long_public;
+                }
                 if (-1 !== ['seconds', 'minutes', 'hours', 'days', 'months', 'years'].indexOf(privatelly)) {
                     time = moment().diff(last, privatelly) + ' ' + privatelly;
                 }
-                self.send(text.user_is_not_playing_public.vars({$user: user, $time: time}), true);
+                self.send(publicText.vars({$user: user, $time: time}), true);
             }
-        }).catch(function () {
-            self.send(text.no_linked_accounts);
+        }).catch(function (e) {
+            self.send(e.message + text.no_linked_accounts);
         });
     },
 

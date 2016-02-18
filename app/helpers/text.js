@@ -42,14 +42,29 @@ module.exports = {
     account_already_linked: new Text([
         'This account is already linked\nTry `/lol status`'
     ]),
-    league_free_for: new Text([
+    league_free_for_linked: new Text([
         'Well done my padawan\nI can see you are League-free for $time'
     ]),
-    stopped_playing_league_ago: new Text([
+    league_free_for_short_private: new Text([
+        'More I expected from you, @$user, you stopped playing League only $time ago..\n' +
+        'However, me in you believe!\nYou will succeed in leaving this behind!'
+    ]),
+    league_free_for_average_private: new Text([
         'Great job @$user, you stopped playing League $time ago'
     ]),
-    user_is_not_playing_public: new Text([
+    league_free_for_long_private: new Text([
+        'Amazing @$user, you are sober for $time! That is to be said'
+    ]),
+    league_free_for_short_public: new Text([
+        'A game was played by @$user $time ago.\n' +
+        '@$user, this number way larger could be by now, that we all know.\n' +
+        'Don\'t let the cravings to ruing your day!'
+    ]),
+    league_free_for_average_public: new Text([
         '@$user is not playing League for $time!\nYou are doing well, @$user, keep up!'
+    ]),
+    league_free_for_long_public: new Text([
+        '$time and counting. Amazing.\n@$user true Jedi is!'
     ]),
     no_linked_accounts: new Text([
         'You have no accounts I know\nTry to `/lol link REGION account_name`'
@@ -77,7 +92,7 @@ module.exports = {
         '#$no: $time on our side @$user is\n',
         '#$no: @$user is counting $time\n',
         '#$no: for $time @$user\n',
-        '#$no: $time ago @$user joined us\n'
+        '#$no: $time ago @$user stopped giving up\n'
     ]),
     top_list_empty: new Text([
         'Sorry no top Jedi'
