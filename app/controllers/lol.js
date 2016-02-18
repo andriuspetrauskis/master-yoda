@@ -18,13 +18,13 @@ module.exports = {
                     lol.status(req.body.user_name, parts[1]);
                     break;
                 case 'top':
-                    lol.top();
+                    lol.top(parts[1]);
                     break;
                 default:
                     lol.help();
             }
         } catch (e) {
-            res.send(e.message);
+            lol.send(e.message);
         }
     }
 };
