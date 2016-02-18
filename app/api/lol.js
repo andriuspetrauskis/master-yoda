@@ -86,8 +86,11 @@ var self = module.exports = {
         });
     },
 
-    top: function () {
-        repo.getTopUsers(3).then(function (documents) {
+    top: function (players) {
+        if ('undefined' === typeof players || !parseInt(players)) {
+            players = 3;
+        }
+        repo.getTopUsers(+players).then(function (documents) {
             var result = text.top_list_header;
             documents.map(function (doc, index) {
                 result += text.top_list_template.vars({
