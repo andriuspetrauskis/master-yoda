@@ -32,6 +32,10 @@ module.exports = {
         'The Slack would never do this to me...',
         'Are you hacking??'
     ]),
+    hacking: new Text([
+        'Are you hacking??',
+        'A hacker? Or a victim? This is the question.'
+    ]),
     bad_server_or_username: new Text([
         'Bahaha very funny, now do it proper way!',
         'Funny it is, type your name!'

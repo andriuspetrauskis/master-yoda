@@ -26,7 +26,9 @@ var self = module.exports = {
         if ('undefined' === typeof params.text) {
             throw new Error(text.empty_content);
         }
-        // to do: add check for token
+        if ('undefined' === typeof params.token || params.token !== process.env.SLACK_LOL_TOKEN) {
+            throw new Error(text.hacking);
+        }
     },
 
     help: function (){
