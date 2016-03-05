@@ -37,7 +37,7 @@ module.exports = {
         'A hacker? Or a victim? This is the question.'
     ]),
     bad_server_or_username: new Text([
-        'Bahaha very funny, now do it proper way!',
+        'Bahaha very funny, now try doing it the proper way!',
         'Funny it is, type your name!'
     ]),
     could_not_access_api: new Text([
@@ -62,21 +62,21 @@ module.exports = {
     league_free_for_short_public: new Text([
         'A game was played by @$user $time ago.\n' +
         '@$user, this number way larger could be by now, that we all know.\n' +
-        'Don\'t let the cravings to ruing your day!'
+        'Don\'t let cravings ruin your day!'
     ]),
     league_free_for_average_public: new Text([
-        '@$user is not playing League for $time!\nYou are doing well, @$user, keep up!'
+        '@$user has not played League for $time!\nYou are doing well, @$user, keep it up!'
     ]),
     league_free_for_long_public: new Text([
-        '$time and counting. Amazing.\n@$user true Jedi is!'
+        '$time and counting. Amazing.\nA true Jedi @$user is!'
     ]),
     no_linked_accounts: new Text([
-        'You have no accounts I know\nTry to `/lol link REGION account_name`'
+        'You have no accounts I know.\nTry to `/lol link REGION account_name`'
     ]),
     top_list_header: new Text([
-        'Congrats our top Jedi who are with light: \n',
+        'Congrats to our top Jedi, who are with Light: \n',
         'Best Jedi known around: \n',
-        'The Force is strong in these: \n',
+        'The Force is strong in these Jedi: \n',
         'Best of the best: \n'
     ]),
     top_list_footer: new Text([
@@ -86,17 +86,17 @@ module.exports = {
         'Wars not make one great.',
         'Adventure. Excitement. A Jedi craves not these things.',
         'Not if anything to say about it I have',
-        'Through the Force, things you will see. Other places. The future…the past. Old friends long gone.',
+        'Through the Force, things you will see. Other places. The future… the past. Old friends long gone.',
         'Once you start down the dark path, forever will it dominate your destiny, consume you it will.',
         'Hmm. In the end, cowards are those who follow the dark side.'
     ]),
     top_list_template: new Text([
         '#$no: @$user for $time\n',
         '#$no: @$user stopped playing $time ago\n',
-        '#$no: $time on our side @$user is\n',
-        '#$no: @$user is counting $time\n',
-        '#$no: for $time @$user\n',
-        '#$no: $time ago @$user stopped giving up\n'
+        '#$no: $time on our side, @$user is\n',
+        '#$no: @$user is going on $time\n',
+        '#$no: for $time, @$user\n',
+        '#$no: $time ago, @$user quit playing\n'
     ]),
     top_list_empty: new Text([
         'Sorry no top Jedi'
@@ -105,15 +105,15 @@ module.exports = {
         'I understand not\nType /help'
     ]),
     unknown_server: new Text([
-        'Sorry, I know no such region\nThe Empire may destroyed it'
+        'Sorry, I know no such region.\nThe Empire may have destroyed it.'
     ]),
     help_text: new Text([
-        'You can link your LoL account to this chat room to track days you quit League\n' +
-        'Other users will not see your LoL username\n' +
+        'You can link your LoL account to this chat room to track the days since you quit League.\n' +
+        'Other users will not see your LoL username.\n' +
         'Other users will see how many days ago you stopped playing\n' +
-        'When you type `/lol status`\n' +
-        'However, if you want to see it by yourself only, type `/lol status me`\n' +
-        'To link an account you need to type `/lol link REGION summoner_name`\n' +
+        'when you type `/lol status`.\n' +
+        'However, if you want to see it by yourself only, type `/lol status me`.\n' +
+        'To link an account, you need to type `/lol link REGION summoner_name`:\n' +
         'REGION - being name of server you were (hopefully) playing - na, euw, eune etc.\n' +
         'summoner_name - this is the account name others see you in game and NOT the name you login with'
     ]),
