@@ -15,7 +15,7 @@ module.exports = {
                     lol.link(parts[1], req.body.user_name, parts.slice(2).join(' '));
                     break;
                 case 'status':
-                    lol.status(req.body.user_name, parts[1]);
+                    lol.status(req.body.user_name, parts[1], parts[2]);
                     break;
                 case 'top':
                     lol.top(parts[1]);

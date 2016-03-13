@@ -68,14 +68,21 @@ var self = module.exports = {
         });
     },
 
-    'status': function (user, privatelly) {
+    'status': function (user, about, metric) {
+        if ('@' === about.charAt(0)) {
+            user = about.substr(1);
+            about = metric;
+        }
+        if ('undefined' === typeof metric) {
+            metric = about;
+        }
         repo.getUser(user).then(function(object) {
             var dates = object[0].summoners.map(function (item) {
                 return item.lastGame;
             });
             var last = Math.max.apply(null, dates);
             var time = moment(last).fromNow(true);
-            if ('me' === privatelly) {
+            if ('me' === about) {
                 var privateText = text.league_free_for_short_private;
                 if (+moment().diff(last, 'hours') > 24) {
                     privateText = text.league_free_for_average_private;
@@ -92,8 +99,8 @@ var self = module.exports = {
                 if (+moment().diff(last, 'days') > 30) {
                     publicText = text.league_free_for_long_public;
                 }
-                if (-1 !== ['seconds', 'minutes', 'hours', 'days', 'months', 'years'].indexOf(privatelly)) {
-                    time = moment().diff(last, privatelly) + ' ' + privatelly;
+                if (-1 !== ['seconds', 'minutes', 'hours', 'days', 'months', 'years'].indexOf(metric)) {
+                    time = moment().diff(last, metric) + ' ' + metric;
                 }
                 self.send(publicText.vars({$user: user, $time: time}), true);
             }
