@@ -69,14 +69,16 @@ var self = module.exports = {
     },
 
     'status': function (user, about, metric) {
-        if ('@' === about.charAt(0)) {
+        if ('undefined' !== typeof about && '@' === about.charAt(0) && '@' !== about) {
             user = about.substr(1);
-            about = metric;
         }
         if ('undefined' === typeof metric) {
             metric = about;
         }
         repo.getUser(user).then(function(object) {
+            if ('undefined' === typeof object[0]) {
+                throw new Error('@' + about + ' ');
+            }
             var dates = object[0].summoners.map(function (item) {
                 return item.lastGame;
             });
