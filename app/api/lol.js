@@ -84,28 +84,30 @@ var self = module.exports = {
             });
             var last = Math.max.apply(null, dates);
             var time = moment(last).fromNow(true);
+            var publicly = false;
+            var outputText = '';
             if ('me' === about) {
-                var privateText = text.league_free_for_short_private;
+                outputText = text.league_free_for_short_private;
                 if (+moment().diff(last, 'hours') > 24) {
-                    privateText = text.league_free_for_average_private;
+                    outputText = text.league_free_for_average_private;
                 }
                 if (+moment().diff(last, 'days') > 40) {
-                    privateText = text.league_free_for_long_private;
+                    outputText = text.league_free_for_long_private;
                 }
-                self.send(privateText.vars({$user: user, $time: time }));
             } else {
-                var publicText = text.league_free_for_short_public;
+                outputText = text.league_free_for_short_public;
                 if (+moment().diff(last, 'hours') > 24) {
-                    publicText = text.league_free_for_average_public;
+                    outputText = text.league_free_for_average_public;
                 }
                 if (+moment().diff(last, 'days') > 30) {
-                    publicText = text.league_free_for_long_public;
+                    outputText = text.league_free_for_long_public;
                 }
-                if (-1 !== ['seconds', 'minutes', 'hours', 'days', 'months', 'years'].indexOf(metric)) {
-                    time = moment().diff(last, metric) + ' ' + metric;
-                }
-                self.send(publicText.vars({$user: user, $time: time}), true);
+                publicly = true;
             }
+            if (-1 !== ['seconds', 'minutes', 'hours', 'days', 'months', 'years'].indexOf(metric)) {
+                time = moment().diff(last, metric) + ' ' + metric;
+            }
+            self.send(outputText.vars({$user: user, $time: time}), publicly);
         }).catch(function (e) {
             self.send(e.message + text.no_linked_accounts);
         });
