@@ -1,7 +1,7 @@
 'use strict';
 
 var rp = require('request-promise');
-var moment = require('moment');
+var moment = require('moment-precise-range');
 var repo = require('../repositories/lol.js');
 var text = require('../helpers/text.js');
 
@@ -106,6 +106,9 @@ var self = module.exports = {
             }
             if (-1 !== ['seconds', 'minutes', 'hours', 'days', 'months', 'years'].indexOf(metric)) {
                 time = moment().diff(last, metric) + ' ' + metric;
+            }
+            if ('full' === metric) {
+                time = moment().preciseDiff(last);
             }
             self.send(outputText.vars({$user: user, $time: time}), publicly);
         }).catch(function (e) {
