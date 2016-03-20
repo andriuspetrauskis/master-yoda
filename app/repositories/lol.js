@@ -49,7 +49,7 @@ module.exports = {
             }
         )
     },
-    getTotalTime: function (now) {
+    getTotalTime: function (now, created) {
         return db.collection('lol').aggregate(
             {
                 $unwind: '$summoners'
@@ -60,6 +60,11 @@ module.exports = {
                     date: {
                         $max: '$summoners.lastGame'
                     }
+                }
+            },
+            {
+                $match : {
+                    "date" : { $gt : created }
                 }
             },
             {

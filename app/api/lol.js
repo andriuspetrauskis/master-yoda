@@ -143,7 +143,7 @@ var self = module.exports = {
     },
 
     total: function(metric) {
-        repo.getTotalTime(+moment().format('x')).then(function (savedSeconds){
+        repo.getTotalTime(+moment().format('x'), +moment('2015-08-04').format('x')).then(function (savedSeconds){
             var ago = moment().subtract(savedSeconds[0].total, 'milliseconds');
             var time = self.getTimeByMetric(ago, metric);
             self.send(text.total_saved_time.vars('$time', time), true);
