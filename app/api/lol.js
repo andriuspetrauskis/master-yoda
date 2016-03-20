@@ -116,7 +116,7 @@ var self = module.exports = {
             result = moment().diff(time, metric) + ' ' + metric;
         }
         if ('full' === metric) {
-            result = moment().preciseDiff(time);
+            result = moment().preciseDiff(time).replace('a few seconds', 'and a few seconds');
         }
 
         return result;
