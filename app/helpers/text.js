@@ -119,5 +119,11 @@ module.exports = {
     ]),
     summoner_not_found: new Text([
         'Summoner found not'
+    ]),
+    error: new Text([
+        'There were an error, sorry about that'
+    ]),
+    total_saved_time: new Text([
+        'For all players $time is saved now'
     ])
 };

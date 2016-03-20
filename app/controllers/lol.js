@@ -20,6 +20,9 @@ module.exports = {
                 case 'top':
                     lol.top(parts[1]);
                     break;
+                case 'total':
+                    lol.total(parts[1]);
+                    break;
                 default:
                     lol.help();
             }

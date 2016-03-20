@@ -83,9 +83,9 @@ var self = module.exports = {
                 return item.lastGame;
             });
             var last = Math.max.apply(null, dates);
-            var time = moment(last).fromNow(true);
             var publicly = false;
             var outputText = '';
+            var time = self.getTimeByMetric(last, metric);
             if ('me' === about) {
                 outputText = text.league_free_for_short_private;
                 if (+moment().diff(last, 'hours') > 24) {
@@ -104,16 +104,22 @@ var self = module.exports = {
                 }
                 publicly = true;
             }
-            if (-1 !== ['seconds', 'minutes', 'hours', 'days', 'months', 'years'].indexOf(metric)) {
-                time = moment().diff(last, metric) + ' ' + metric;
-            }
-            if ('full' === metric) {
-                time = moment().preciseDiff(last);
-            }
             self.send(outputText.vars({$user: user, $time: time}), publicly);
         }).catch(function (e) {
             self.send(e.message + text.no_linked_accounts);
         });
+    },
+
+    getTimeByMetric: function (time, metric) {
+        var result = moment(time).fromNow(true);
+        if (-1 !== ['seconds', 'minutes', 'hours', 'days', 'months', 'years'].indexOf(metric)) {
+            result = moment().diff(time, metric) + ' ' + metric;
+        }
+        if ('full' === metric) {
+            result = moment().preciseDiff(time);
+        }
+
+        return result;
     },
 
     top: function (players) {
@@ -133,6 +139,16 @@ var self = module.exports = {
             self.send(result, true);
         }).catch(function () {
             self.send(text.top_list_empty);
+        });
+    },
+
+    total: function(metric) {
+        repo.getTotalTime(+moment().format('x')).then(function (savedSeconds){
+            var ago = moment().subtract(savedSeconds[0].total, 'milliseconds');
+            var time = self.getTimeByMetric(ago, metric);
+            self.send(text.total_saved_time.vars('$time', time));
+        }).catch(function(e) {
+            self.send(e + text.error);
         });
     },
 

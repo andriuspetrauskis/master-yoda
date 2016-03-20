@@ -49,6 +49,36 @@ module.exports = {
             }
         )
     },
+    getTotalTime: function (now) {
+        return db.collection('lol').aggregate(
+            {
+                $unwind: '$summoners'
+            },
+            {
+                $group: {
+                    _id: '$name',
+                    date: {
+                        $max: '$summoners.lastGame'
+                    }
+                }
+            },
+            {
+                $project: {
+                    saved: {
+                        $subtract: [now, "$date"]
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    total: {
+                        $sum: "$saved"
+                    }
+                }
+            }
+        )
+    },
     getLeastCheckedSummoners: function () {
         return db.collection('lol').aggregate(
             {
