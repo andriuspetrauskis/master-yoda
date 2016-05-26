@@ -118,6 +118,9 @@ var self = module.exports = {
         if ('full' === metric) {
             result = moment().preciseDiff(time).replace('a few seconds', 'and a few seconds');
         }
+        if ('date' === metric) {
+            result = moment(time).format();
+        }
 
         return result;
     },
