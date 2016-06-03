@@ -62,13 +62,13 @@ module.exports = {
     league_free_for_short_public: new Text([
         'A game was played by @$user $time ago.\n' +
         '@$user, this number way larger could be by now, that we all know.\n' +
-        'Don\'t let cravings ruin your day!'
+        'You have been recently manipulated by evil. :sith: \nBrother, we must strive for Light!'
     ]),
     league_free_for_average_public: new Text([
-        '@$user has not played League for $time!\nYou are doing well, @$user, keep it up!'
+        '@$user has not played League for $time!\nYou are doing well, @$user, keep it up! \n A worthy apprentice you have become!\n:obiwan:'
     ]),
     league_free_for_long_public: new Text([
-        '$time and counting. Amazing.\nA true Jedi @$user is!'
+        '$time and counting. Amazing.\nA true Master Jedi @$user is! \n :yoda:'
     ]),
     no_linked_accounts: new Text([
         'You have no accounts I know.\nTry to `/lol link REGION account_name`'
