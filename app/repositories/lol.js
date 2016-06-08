@@ -124,7 +124,7 @@ module.exports = {
     getJoinedSince: function (since) {
         return db.collection('lol').find(
             {
-                "joined": since
+                "joined": { $gt: since }
             }
         );
     }
