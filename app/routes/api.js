@@ -6,6 +6,8 @@ var recent = require('../controllers/recent.js');
 module.exports = function(app) {
     app.post('/api/lol', yoda.lolAction);
 };
+
 module.exports = function(app) {
-    app.post('/api/recent', recent.indexAction);
+    app.get('/api/recent', recent.indexAction);
+    app.get('/api/recent.json', recent.indexAction);
 };
