@@ -4,7 +4,7 @@ var repo = require('../repositories/lol.js');
 
 module.exports = {
     indexAction: function (req, res) {
-        repo.getJoinedSince(parseInt(req.get('since'))).then(
+        repo.getJoinedSince(parseInt(req.query.since)).then(
             function (users) {
                 return users.map(function (user) {
                     return {
@@ -14,6 +14,9 @@ module.exports = {
                         }).lastGame
                     };
                 });
+            },
+            function failure (err) {
+                throw new Error(err);
             }
         ).then(
             function (result) {
