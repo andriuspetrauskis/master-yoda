@@ -13,7 +13,10 @@ module.exports = {
         return db.collection('lol').find({ name: user }).limit(1);
     },
     addSummoner: function (user, server, id, lastGame) {
-        return db.collection('lol').update({ name: user }, {
+        return db.collection('lol').update({
+            name: user,
+            joined: new Date().getTime()
+        }, {
             '$push': {
                 summoners: {
                     id: id,
