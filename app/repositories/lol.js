@@ -120,5 +120,12 @@ module.exports = {
                 'summoners.$.lastGame': lastGame
             }
         });
+    },
+    getJoinedSince: function (since) {
+        return db.collection('lol').find(
+            {
+                "joined": since
+            }
+        );
     }
 };
