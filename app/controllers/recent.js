@@ -16,11 +16,21 @@ module.exports = {
                 });
             },
             function failure (err) {
-                throw new Error(err);
+                res.json({ error: err.message });
             }
         ).then(
             function (result) {
-                res.jsonp(result);
+                res.json(result);
+            }
+        );
+    },
+    recentAction: function (req, res) {
+        repo.getPlayedSince(parseInt(req.query.since)).then(
+            function (result) {
+                res.json(result);
+            },
+            function (e) {
+                res.json({error: e.message});
             }
         );
     }
