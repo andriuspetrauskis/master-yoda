@@ -136,7 +136,7 @@ module.exports = {
             {
                 $group: {
                     _id: '$name',
-                    date: {
+                    lastGame: {
                         $max: '$summoners.lastGame'
                     },
                     joined: { $first: '$joined' }
