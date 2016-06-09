@@ -151,8 +151,7 @@ module.exports = {
                 $project: {
                     joined: 1,
                     lastGame: 1,
-                    _id: 0,
-                    name: 0
+                    _id: 0
                 }
             }
         );
