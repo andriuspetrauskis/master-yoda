@@ -25,6 +25,9 @@ module.exports = {
         );
     },
     recentAction: function (req, res) {
+        res.setHeader('Access-Control-Allow-Origin', 'http://quitlol.com');
+        res.setHeader('Access-Control-Allow-Methods', 'GET');
+        res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
         repo.getPlayedSince(parseInt(req.query.since)).then(
             function (result) {
                 res.json(result);
