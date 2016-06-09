@@ -127,5 +127,34 @@ module.exports = {
                 "joined": { $gt: since }
             }
         );
+    },
+    getPlayedSince: function (since) {
+        return db.collection('lol').aggregate(
+            {
+                $unwind: '$summoners'
+            },
+            {
+                $group: {
+                    _id: '$name',
+                    date: {
+                        $max: '$summoners.lastGame'
+                    },
+                    joined: { $first: '$joined' }
+                }
+            },
+            {
+                $match : {
+                    "joined" : { $gte : since }
+                }
+            },
+            {
+                $project: {
+                    joined: 1,
+                    lastGame: 1,
+                    _id: 0,
+                    name: 0
+                }
+            }
+        );
     }
 };
