@@ -121,6 +121,15 @@ var self = module.exports = {
         if ('date' === metric) {
             result = moment(time).format();
         }
+        if ('timestamp' === metric) {
+            result = time;
+        }
+        if ('timestampVsNow' === metric) {
+            result = time + '/' + moment().format('x');
+        }
+        if ('ms' === metric) {
+            result = parseInt(moment().format('x')) - time;
+        }
 
         return result;
     },
