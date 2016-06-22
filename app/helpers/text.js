@@ -64,6 +64,11 @@ module.exports = {
         '@$user, this number way larger could be by now, that we all know.\n' +
         'You have been recently manipulated by evil. :sith: \nBrother, we must strive for Light!'
     ]),
+    league_free_for_betweenshortandaverage_public: new Text([
+        '@$user has been clear for $time.\n' +
+        '@$user, you are beginning a new journey, where you determine your own destiny.\n' +
+        'You are now on your own feet. :jarjar: \nMy friend, it is up to you to continue this path!'
+    ]),
     league_free_for_average_public: new Text([
         '@$user has not played League for $time!\nYou are doing well, @$user, keep it up! \n A worthy apprentice you have become!\n:obiwan:'
     ]),
