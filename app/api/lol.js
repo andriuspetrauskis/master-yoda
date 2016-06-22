@@ -96,7 +96,10 @@ var self = module.exports = {
                 }
             } else {
                 outputText = text.league_free_for_short_public;
-                if (+moment().diff(last, 'hours') > 24) {
+                if (+moment().diff(last, 'days') > 3) {
+                    outputText = text.league_free_for_betweenshortandaverage_public;
+                }
+                if (+moment().diff(last, 'days') > 7) {
                     outputText = text.league_free_for_average_public;
                 }
                 if (+moment().diff(last, 'days') > 30) {
