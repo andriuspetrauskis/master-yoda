@@ -14,8 +14,7 @@ module.exports = {
     },
     addSummoner: function (user, server, id, lastGame) {
         return db.collection('lol').update({
-            name: user,
-            joined: new Date().getTime()
+            name: user
         }, {
             '$push': {
                 summoners: {
@@ -24,7 +23,8 @@ module.exports = {
                     lastGame: lastGame,
                     lastCheck: new Date().getTime()
                 }
-            }
+            },
+            joined: new Date().getTime()
         }, {
             upsert: true
         });
