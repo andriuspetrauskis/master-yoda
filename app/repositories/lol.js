@@ -24,7 +24,10 @@ module.exports = {
                     lastCheck: new Date().getTime()
                 }
             },
-            joined: new Date().getTime()
+            '$set': {
+                name: user,
+                joined: new Date().getTime()
+            }
         }, {
             upsert: true
         });
