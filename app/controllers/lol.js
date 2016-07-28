@@ -23,6 +23,9 @@ module.exports = {
                 case 'total':
                     lol.total(parts[1]);
                     break;
+                case 'battle':
+                    lol.battle(req.body.user_name, parts[1]);
+                    break;
                 default:
                     lol.help();
             }
