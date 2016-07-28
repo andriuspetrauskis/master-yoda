@@ -113,6 +113,95 @@ var self = module.exports = {
         });
     },
 
+    'battle': function (user, target) {
+
+        //format target
+        if ('undefined' !== typeof target && '@' === target.charAt(0) && '@' !== target) {
+            var formattedTarget = target.substr(1);
+        }
+
+        //variable to see if both user and target data is collected
+        var dataCollected = false;
+
+        //store player data
+        var userLastPlayed = 0;
+        var targetLastPlayed = 0;
+
+        //get user data
+        repo.getUser(user).then(function(object) {
+
+            if ('undefined' === typeof object[0]) {
+                throw new Error('@' + target + ' ');
+            }
+
+            var dates = object[0].summoners.map(function (item) {
+                return item.lastGame;
+            });
+
+            var last = Math.max.apply(null, dates);
+
+            userLastPlayed = Date.now() - last;
+
+            if (dataCollected) {
+                fight(userLastPlayed, targetLastPlayed);
+            } else {
+                dataCollected = true;
+            }
+            
+        }).catch(function (e) {
+            self.send(e.message + text.no_linked_accounts);
+        });
+
+        //get target data
+        repo.getUser(formattedTarget).then(function(object) {
+
+            if ('undefined' === typeof object[0]) {
+                throw new Error('@' + formattedTarget + ' ');
+            }
+
+            var dates = object[0].summoners.map(function (item) {
+                return item.lastGame;
+            });
+
+            var last = Math.max.apply(null, dates);
+
+            targetLastPlayed = Date.now() - last;
+
+            if (dataCollected) {
+                fight(userLastPlayed, targetLastPlayed);
+            } else {
+                dataCollected = true;
+            }
+
+        }).catch(function (e) {
+            self.send(e.message + text.no_linked_accounts);
+        });
+
+        //fight using last played data from user and target, and respond with battle result
+        function fight(userLastPlayedTime, targetLastPlayedTime) {
+            //calculate odds using data
+            var userPower = 12.25062252 * Math.log(userLastPlayedTime) - 225.7566385;
+            var targetPower = 12.25062252 * Math.log(targetLastPlayedTime) - 225.7566385;
+
+            //run the random battle
+            var userScore = Math.random() * userPower;
+            var targetScore = Math.random() * targetPower;
+
+            //figure out what message to report
+            if (userScore > targetScore) {
+                var outputText = text.youWinBattle;
+            } else {
+                var outputText = text.youLoseBattle;
+            }
+            
+            var publicly = true;
+
+            //send message
+            self.send(outputText.vars({$user: user, $target: formattedTarget}), publicly);
+        }
+
+    },
+
     getTimeByMetric: function (time, metric) {
         var result = moment(time).fromNow(true);
         if (-1 !== ['seconds', 'minutes', 'hours', 'days', 'months', 'years'].indexOf(metric)) {

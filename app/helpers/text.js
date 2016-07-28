@@ -130,5 +130,11 @@ module.exports = {
     ]),
     total_saved_time: new Text([
         'For all players $time is saved now'
-    ])
+    ]),
+    you_Win_Battle: new Text([
+        'You won the battle against @$target! Come back later for an upgraded version of QuitLoL Battle!'
+    ]),
+    you_Lose_Battle: new Text([
+        'You lost the battle to @$target! Thanks for playing!'
+    ]),
 };
