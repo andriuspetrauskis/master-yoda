@@ -183,21 +183,27 @@ var self = module.exports = {
             var userPower = 12.25062252 * Math.log(userLastPlayedTime) - 225.7566385;
             var targetPower = 12.25062252 * Math.log(targetLastPlayedTime) - 225.7566385;
 
+            //calculating weeks without playing
+            var userWeeks = Math.floor(userLastPlayedTime / 6.048e+8);
+            var targWeeks = Math.floor(targetLastPlayedTime / 6.048e+8);
+            var userPower = Math.floor(userPower);
+            var targetPower = Math.floor(targetPower);
+
             //run the random battle
             var userScore = Math.random() * userPower;
             var targetScore = Math.random() * targetPower;
 
             //figure out what message to report
             if (userScore > targetScore) {
-                var outputText = text.youWinBattle;
+                var outputText = text.you_Win_Battle;
             } else {
-                var outputText = text.youLoseBattle;
+                var outputText = text.you_Lose_Battle;
             }
             
             var publicly = true;
 
             //send message
-            self.send(outputText.vars({$user: user, $target: formattedTarget}), publicly);
+            self.send(outputText.vars({$target: formattedTarget, $yourPower: userPower, $targPower: targetPower, $yourWeeks: userWeeks, $targWeeks: targWeeks}), publicly);
         }
 
     },
