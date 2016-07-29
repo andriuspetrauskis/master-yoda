@@ -134,13 +134,17 @@ module.exports = {
     you_Win_Battle: new Text([
         'You won the battle against @$target!\n' +
         'You have gone $yourWeeks weeks without playing LoL,\n' +
+        'So your power boost was $yourPower%\n' +
         '$target has gone $targWeeks weeks without playing LoL,\n' +
+        '$target had a power boost of $targPower%\n' +
         'Come back later for an upgraded version of QuitLoL Battle!'
     ]),
     you_Lose_Battle: new Text([
         'You lost the battle to @$target!\n' +
         'You have gone $yourWeeks weeks without playing LoL,\n' +
+        'So your power boost was $yourPower%\n' +
         '$target has gone $targWeeks weeks without playing LoL,\n' +
+        '$target had a power boost of $targPower%\n' +
         'Thanks for playing, come back again soon!'
     ]),
 };
