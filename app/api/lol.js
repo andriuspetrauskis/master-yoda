@@ -112,6 +112,33 @@ var self = module.exports = {
             self.send(e.message + text.no_linked_accounts);
         });
     },
+    'slainUsers': function () {
+
+        var utc = new Date().toJSON().slice(0,10);
+
+        repo.getFoughtUsers(utc).then(function(object){
+
+            var listedDeadUsers = object.filter(function(returnedUser){
+                return returnedUser.dead;
+            }).map(function(user){
+                return user.name;
+            })
+
+            var listedKillers = object.filter(function(returnedUser){
+                return returnedUser.points;
+            }).map(function(user){
+                return user.name + " with " + user.points + " victories\n";
+            })
+
+            var outputText = text.listOfDeadUsers;
+            var publicly = true;
+
+            self.send(outputText.vars({$list: listedDeadUsers, $points: listedKillers}), publicly);
+        }).catch(function (e) {
+            self.send(e.message);
+        });
+
+    },
 
     'battle': function (user, target) {
 
@@ -127,11 +154,28 @@ var self = module.exports = {
         var userLastPlayed = 0;
         var targetLastPlayed = 0;
 
+        //current scores - to be updated from server
+        var userKillScore;
+        var targetKillScore;
+
+        //today's date
+        var utc = new Date().toJSON().slice(0,10);
+
         //get user data
         repo.getUser(user).then(function(object) {
 
             if ('undefined' === typeof object[0]) {
-                throw new Error('@' + target + ' ');
+                throw new Error('@' + user + " " + text.no_linked_accounts);
+            }
+
+            if (object[0]['utc'] === utc && object[0]['dead']) {
+                throw new Error('@' + user + " " + text.already_died_today);
+            }
+
+            if (object[0]['utc'] === utc) {
+                userKillScore = object[0]['points'] + 1;
+            } else {
+                userKillScore = 1;
             }
 
             var dates = object[0].summoners.map(function (item) {
@@ -149,7 +193,7 @@ var self = module.exports = {
             }
             
         }).catch(function (e) {
-            self.send(e.message + text.no_linked_accounts);
+            self.send(e.message);
         });
 
         //get target data
@@ -157,6 +201,16 @@ var self = module.exports = {
 
             if ('undefined' === typeof object[0]) {
                 throw new Error('@' + formattedTarget + ' ');
+            }
+
+            if (object[0]['utc'] === utc && object[0]['dead']) {
+                throw new Error('@' + formattedTarget + " " + text.target_already_died_today);
+            }
+
+            if (object[0]['utc'] === utc) {
+                targetKillScore = object[0]['points'] + 1;
+            } else {
+                targetKillScore = 1;
             }
 
             var dates = object[0].summoners.map(function (item) {
@@ -196,8 +250,10 @@ var self = module.exports = {
             //figure out what message to report
             if (userScore > targetScore) {
                 var outputText = text.you_Win_Battle;
+                repo.recordKill(user, userKillScore, formattedTarget, utc);
             } else {
                 var outputText = text.you_Lose_Battle;
+                repo.recordKill(formattedTarget, targetKillScore, user, utc);
             }
             
             var publicly = true;

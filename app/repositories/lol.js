@@ -12,6 +12,31 @@ module.exports = {
     getUser: function (user) {
         return db.lol.find({ name: user }).limit(1);
     },
+    recordKill: function(winner, winnerScore, loser, date) {
+        db.lol.update({
+            'name': winner
+        }, {
+            $set: {
+                'utc': date,
+                'points': winnerScore
+            }
+        });
+
+        db.lol.update({
+            'name': loser
+        }, {
+            $set: {
+                'utc': date,
+                'dead': true
+            }
+        });
+
+    },
+    getFoughtUsers: function(date) {
+        return db.lol.find({
+            'utc': date
+        });
+    },
     addSummoner: function (user, server, id, lastGame) {
         return db.lol.update({
             name: user

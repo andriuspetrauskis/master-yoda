@@ -147,4 +147,18 @@ module.exports = {
         '$target had a power boost of $targPower%\n' +
         'Thanks for playing, come back again soon!'
     ]),
+    already_died_today: new Text([
+        'You already lost a battle today, sorry!\n' +
+        'Try again tomorrow!'
+    ]),
+    target_already_died_today: new Text([
+        'Your target already lost a battle today, sorry!\n' +
+        'Try someone else!'
+    ]),
+    listOfDeadUsers: new Text([
+        'Here is a list of those fallen in battle today:\n'+
+        '$list\n'+
+        'Who scored the most points?\n'+
+        '$points'
+        ])
 };
