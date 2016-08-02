@@ -4,16 +4,16 @@ var db = require('../db.js')();
 
 module.exports = {
     getSummonerCount: function (server, id) {
-        return db.collection('lol').count({
+        return db.lol.count({
             'summoners.id': id,
             'summoners.server': server
         });
     },
     getUser: function (user) {
-        return db.collection('lol').find({ name: user }).limit(1);
+        return db.lol.find({ name: user }).limit(1);
     },
     recordKill: function(winner, winnerScore, loser, date) {
-        db.collection('lol').update({
+        db.lol.update({
             'name': winner
         }, {
             $set: {
@@ -22,7 +22,7 @@ module.exports = {
             }
         });
 
-        db.collection('lol').update({
+        db.lol.update({
             'name': loser
         }, {
             $set: {
@@ -33,12 +33,12 @@ module.exports = {
 
     },
     getFoughtUsers: function(date) {
-        return db.collection('lol').find({
+        return db.lol.find({
             'utc': date
         });
     },
     addSummoner: function (user, server, id, lastGame) {
-        return db.collection('lol').update({
+        return db.lol.update({
             name: user
         }, {
             '$push': {
@@ -58,7 +58,7 @@ module.exports = {
         });
     },
     getTopUsers: function (count) {
-        return db.collection('lol').aggregate(
+        return db.lol.aggregate(
             {
                 $unwind: '$summoners'
             },
@@ -81,7 +81,7 @@ module.exports = {
         )
     },
     getTotalTime: function (now, created) {
-        return db.collection('lol').aggregate(
+        return db.lol.aggregate(
             {
                 $unwind: '$summoners'
             },
@@ -116,7 +116,7 @@ module.exports = {
         )
     },
     getLeastCheckedSummoners: function () {
-        return db.collection('lol').aggregate(
+        return db.lol.aggregate(
             {
                 $unwind: '$summoners'
             },
@@ -139,7 +139,7 @@ module.exports = {
         );
     },
     updateSummonerDate: function (server, id, lastGame) {
-        return db.collection('lol').update({
+        return db.lol.update({
             'summoners.server': server,
             'summoners.id': id
         }, {
@@ -150,14 +150,14 @@ module.exports = {
         });
     },
     getJoinedSince: function (since) {
-        return db.collection('lol').find(
+        return db.lol.find(
             {
                 "joined": { $gt: since }
             }
         );
     },
     getPlayedSince: function (since) {
-        return db.collection('lol').aggregate(
+        return db.lol.aggregate(
             {
                 $unwind: '$summoners'
             },
