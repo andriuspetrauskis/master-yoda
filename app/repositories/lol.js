@@ -18,7 +18,8 @@ module.exports = {
         }, {
             $set: {
                 'utc': date,
-                'points': winnerScore
+                'points': winnerScore,
+                'dead': false
             }
         });
 
@@ -31,6 +32,16 @@ module.exports = {
             }
         });
 
+    },
+    accident: function(user, date) {
+        db.lol.update({
+            'name': user
+        }, {
+            $set: {
+                'utc': date,
+                'dead': true
+            }
+        });
     },
     getFoughtUsers: function(date) {
         return db.lol.find({
@@ -55,6 +66,24 @@ module.exports = {
             }
         }, {
             upsert: true
+        });
+    },
+    activateShield: function (user) {
+        return db.lol.update({
+            name: user
+        }, {
+            '$set': {
+                shield: true
+            }
+        });
+    },
+    deActivateShield: function (user) {
+        return db.lol.update({
+            name: user
+        }, {
+            '$set': {
+                shield: false
+            }
         });
     },
     getTopUsers: function (count) {

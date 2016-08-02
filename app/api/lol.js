@@ -68,6 +68,22 @@ var self = module.exports = {
         });
     },
 
+    'shield': function (user, mode){
+
+        if (mode === "up") {
+            repo.activateShield(user).then(function(object) {
+            self.send(text.shield_is_up);
+        });
+        } else if (mode === "down") {
+            repo.deActivateShield(user).then(function(object) {
+            self.send(text.shield_is_down);
+        });
+        } else {
+            self.send(text.shield_typo);
+        }
+        
+    },
+
     'status': function (user, about, metric) {
         if ('undefined' !== typeof about && '@' === about.charAt(0) && '@' !== about) {
             user = about.substr(1);
@@ -122,13 +138,13 @@ var self = module.exports = {
                 return returnedUser.dead;
             }).map(function(user){
                 return user.name;
-            })
+            });
 
             var listedKillers = object.filter(function(returnedUser){
                 return returnedUser.points;
             }).map(function(user){
                 return user.name + " with " + user.points + " victories\n";
-            })
+            });
 
             var outputText = text.listOfDeadUsers;
             var publicly = true;
@@ -172,10 +188,21 @@ var self = module.exports = {
                 throw new Error('@' + user + " " + text.already_died_today);
             }
 
+            if (object[0]['shield']) {
+                throw new Error('@' + user + " " + text.shield_still_up);
+            }
+
             if (object[0]['utc'] === utc) {
                 userKillScore = object[0]['points'] + 1;
             } else {
                 userKillScore = 1;
+            }
+
+            if (Math.random() > 0.8) {
+                repo.accident(user, utc).then(function(){
+                    self.send(text.accident, publicly);
+                    throw new Error('@' + user + " " + text.accident);
+                })
             }
 
             var dates = object[0].summoners.map(function (item) {
@@ -207,6 +234,10 @@ var self = module.exports = {
                 throw new Error('@' + formattedTarget + " " + text.target_already_died_today);
             }
 
+            if (object[0]['shield']) {
+                throw new Error('@' + user + " " + text.enemy_has_shield);
+            }
+
             if (object[0]['utc'] === utc) {
                 targetKillScore = object[0]['points'] + 1;
             } else {
@@ -228,7 +259,7 @@ var self = module.exports = {
             }
 
         }).catch(function (e) {
-            self.send(e.message + text.no_linked_accounts);
+            self.send(e.message + text.error);
         });
 
         //fight using last played data from user and target, and respond with battle result
