@@ -160,5 +160,23 @@ module.exports = {
         '$list\n'+
         'Who scored the most points?\n'+
         '$points'
+    ]),
+    shield_is_up: new Text([
+        'Your shield was successfully activated.'
+        ]),
+    shield_is_down: new Text([
+        'Your shield was deactivated.'
+        ]),
+    shield_typo: new Text([
+        'Shield up or down? Did you make a typo?'
+        ]),
+    shield_still_up: new Text([
+        'You can\'t attack, your shield is still up'
+        ]),
+    enemy_has_shield: new Text([
+        'You can\'t attack because your target has a shield'
+        ]),
+    accident: new Text([
+        'You were about to attack, when you tripped and fell. Try again tomorrow.'
         ])
 };
