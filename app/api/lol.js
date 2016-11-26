@@ -333,7 +333,7 @@ var self = module.exports = {
                 });
             });
             result += text.top_list_footer;
-            self.send(result, false);
+            self.send(result, true);
         }).catch(function () {
             self.send(text.top_list_empty);
         });
