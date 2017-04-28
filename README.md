@@ -4,9 +4,14 @@
 What is this is? Yoda lives in Slack. Yoda peeks into League stash.
 Tell Yoda LoL name used by you, and Yoda will say if good you do.
 
+#Requirements
+  - [nodejs](https://nodejs.org/en/)
+  - [mongodb](https://www.mongodb.com/)
+  - cron is set up for [openshift](https://www.openshift.com/) (optional)
+
 #Installation
-Just `npm install` is enough.
+Checkout this repository and run `npm install`
 
 #How to use
-1. Configure [Slack slash command] (https://api.slack.com/slash-commands) `/lol` pointing to your-server.com/api/lol
+1. Configure [Slack slash command](https://api.slack.com/slash-commands) `/lol` pointing to your-server.com/api/lol
 2. In a Slack channel type `/lol help`
