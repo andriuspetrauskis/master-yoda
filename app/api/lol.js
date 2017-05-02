@@ -247,26 +247,6 @@ var self = module.exports = {
         return result;
     },
 
-    top: function (players) {
-        if ('undefined' === typeof players || !parseInt(players)) {
-            players = 3;
-        }
-        repo.getTopUsers(+players).then(function (documents) {
-            var result = text.top_list_header;
-            documents.map(function (doc, index) {
-                result += text.top_list_template.vars({
-                    $no: index+1,
-                    $user: doc._id,
-                    $time: moment(doc.date).fromNow(true)
-                });
-            });
-            result += text.top_list_footer;
-            self.send(result, false);
-        }).catch(function () {
-            self.send(text.top_list_empty);
-        });
-    },
-
     total: function(metric) {
         repo.getTotalTime(+moment().format('x'), +moment('2015-08-04').format('x')).then(function (savedSeconds){
             var ago = moment().subtract(savedSeconds[0].total, 'milliseconds');

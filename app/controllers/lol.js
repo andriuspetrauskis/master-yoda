@@ -13,9 +13,6 @@ module.exports = {
             apiAction.run(req);
 
             switch (parts[0]) {
-                case 'top':
-                    lol.top(parts[1]);
-                    break;
                 case 'total':
                     lol.total(parts[1]);
                     break;
