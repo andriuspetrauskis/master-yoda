@@ -13,9 +13,6 @@ module.exports = {
             apiAction.run(req);
 
             switch (parts[0]) {
-                case 'status':
-                    lol.status(req.body.user_name, parts[1], parts[2]);
-                    break;
                 case 'top':
                     lol.top(parts[1]);
                     break;
