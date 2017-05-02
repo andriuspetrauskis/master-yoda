@@ -35,8 +35,6 @@ module.exports = {
                 case 'shield':
                     lol.shield(req.body.user_name, parts[1]);
                     break;
-                default:
-                    lol.help();
             }
         } catch (e) {
             lol.send(e.message);

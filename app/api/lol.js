@@ -31,10 +31,6 @@ var self = module.exports = {
         }
     },
 
-    help: function (){
-        self.send(text.help_text);
-    },
-
     'action': function (name) {
         name = name.toLowerCase().replace(/[^\w]/g, '');
         try {
