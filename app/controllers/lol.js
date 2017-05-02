@@ -9,6 +9,9 @@ module.exports = {
             lol.check(req.body);
             var parts = req.body.text.split(' ');
 
+            var apiAction = lol.action(parts[0]);
+            apiAction.run(req);
+
             switch (parts[0]) {
                 case 'link':
                     //user name can have spaces

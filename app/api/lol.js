@@ -35,6 +35,17 @@ var self = module.exports = {
         self.send(text.help_text);
     },
 
+    'action': function (name) {
+        name = name.toLowerCase().replace(/[^\w]/g, '');
+        try {
+            var action = require('./lol/' + name + '.js');
+            action.lol = self;
+            action.run.bind(action);
+        } catch (err) {
+            throw Error(text.invalid_command);
+        }
+    },
+
     'link': function (server, user, player) {
         self.checkServer(server);
         if ('undefined' === typeof server || 'undefined' === typeof player) {
@@ -81,7 +92,7 @@ var self = module.exports = {
         } else {
             self.send(text.shield_typo);
         }
-        
+
     },
 
     'status': function (user, about, metric) {
@@ -218,7 +229,7 @@ var self = module.exports = {
             } else {
                 dataCollected = true;
             }
-            
+
         }).catch(function (e) {
             self.send(e.message);
         });
@@ -286,7 +297,7 @@ var self = module.exports = {
                 var outputText = text.you_Lose_Battle;
                 repo.recordKill(formattedTarget, targetKillScore, user, utc);
             }
-            
+
             var publicly = true;
 
             //send message

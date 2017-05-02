@@ -178,5 +178,8 @@ module.exports = {
         ]),
     accident: new Text([
         'You were about to attack, when you tripped and fell. Try again tomorrow.'
-        ])
+        ]),
+    invalid_command: new Text([
+        'Invalid command, please type `/lol help` for help, `/lol list` for available commands'
+    ])
 };
