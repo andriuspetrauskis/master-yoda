@@ -1,12 +1,10 @@
 'use strict';
 
-var rp = require('request-promise');
 var moment = require('moment-precise-range');
 var repo = require('../repositories/lol.js');
 var text = require('../helpers/text.js');
 
 var self = module.exports = {
-    known_servers: ['na', 'eune', 'euw', 'br', 'kr', 'lan', 'las', 'oce', 'ru', 'tr'],
     output: null,
     send: function (text, publicly) {
         if ('string' !== typeof text) {
@@ -40,39 +38,6 @@ var self = module.exports = {
         } catch (err) {
             throw Error(text.invalid_command);
         }
-    },
-
-    'link': function (server, user, player) {
-        self.checkServer(server);
-        if ('undefined' === typeof server || 'undefined' === typeof player) {
-            throw Error(text.bad_server_or_username);
-        }
-        server = server.toLowerCase();
-        player = player.toLowerCase();
-        rp('https://' + server + '.api.pvp.net/api/lol/' + server + '/v1.4/summoner/by-name/' + player +
-            '?api_key=' + process.env.LOL_KEY
-        ).then(function (text) {
-            return JSON.parse(text);
-        }, function failed(err) {
-            if (-1 !== err.message.indexOf('403')) {
-                throw new Error(text.could_not_access_api);
-            }
-            throw new Error(text.summoner_not_found);
-        }).then(function (summonerData) {
-            self.data = summonerData[player.replace(/ /g, '')];
-            return repo.getSummonerCount(server, self.data.id);
-        }).then(function (count) {
-            if (count > 0) {
-                throw new Error(text.account_already_linked);
-            }
-        }).then(function () {
-            return repo.addSummoner(user, server, self.data.id, self.data.revisionDate);
-        }).then(function () {
-            var freeFor = moment(self.data.revisionDate).fromNow(true);
-            self.send(text.league_free_for_linked.vars('$time', freeFor));
-        }).catch(function (err){
-            self.send(err.message);
-        });
     },
 
     'shield': function (user, mode){
@@ -354,14 +319,5 @@ var self = module.exports = {
         }).catch(function(e) {
             self.send(e + text.error);
         });
-    },
-
-    checkServer: function(server) {
-        if ('undefined' === typeof server) {
-            throw new Error(text.empty_server);
-        }
-        if (-1 === self.known_servers.indexOf(server.toLowerCase())) {
-            throw new Error(text.unknown_server);
-        }
     }
 };

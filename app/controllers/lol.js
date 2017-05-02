@@ -13,10 +13,6 @@ module.exports = {
             apiAction.run(req);
 
             switch (parts[0]) {
-                case 'link':
-                    //user name can have spaces
-                    lol.link(parts[1], req.body.user_name, parts.slice(2).join(' '));
-                    break;
                 case 'status':
                     lol.status(req.body.user_name, parts[1], parts[2]);
                     break;
