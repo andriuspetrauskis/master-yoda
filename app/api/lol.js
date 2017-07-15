@@ -40,33 +40,6 @@ var self = module.exports = {
         }
     },
 
-    'slainUsers': function () {
-
-        var utc = new Date().toJSON().slice(0,10);
-
-        repo.getFoughtUsers(utc).then(function(object){
-
-            var listedDeadUsers = object.filter(function(returnedUser){
-                return returnedUser.dead;
-            }).map(function(user){
-                return user.name;
-            });
-
-            var listedKillers = object.filter(function(returnedUser){
-                return returnedUser.points;
-            }).map(function(user){
-                return user.name + " with " + user.points + " victories\n";
-            });
-
-            var outputText = text.listOfDeadUsers;
-            var publicly = true;
-
-            self.send(outputText.vars({$list: listedDeadUsers, $points: listedKillers}), publicly);
-        }).catch(function (e) {
-            self.send(e.message);
-        });
-
-    },
     getTimeByMetric: function (time, metric) {
         var result = moment(time).fromNow(true);
         if (-1 !== ['seconds', 'minutes', 'hours', 'days', 'months', 'years'].indexOf(metric)) {

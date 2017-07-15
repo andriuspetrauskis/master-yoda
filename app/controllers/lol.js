@@ -11,12 +11,6 @@ module.exports = {
 
             var apiAction = lol.action(parts[0]);
             apiAction.run(req);
-
-            switch (parts[0]) {
-                case 'slain':
-                    lol.slainUsers();
-                    break;
-            }
         } catch (e) {
             lol.send(e.message);
         }
