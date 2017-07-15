@@ -13,9 +13,6 @@ module.exports = {
             apiAction.run(req);
 
             switch (parts[0]) {
-                case 'battle':
-                    lol.battle(req.body.user_name, parts[1]);
-                    break;
                 case 'slain':
                     lol.slainUsers();
                     break;
