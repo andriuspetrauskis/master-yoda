@@ -40,22 +40,6 @@ var self = module.exports = {
         }
     },
 
-    'shield': function (user, mode){
-
-        if (mode === "up") {
-            repo.activateShield(user).then(function(object) {
-            self.send(text.shield_is_up);
-        });
-        } else if (mode === "down") {
-            repo.deActivateShield(user).then(function(object) {
-            self.send(text.shield_is_down);
-        });
-        } else {
-            self.send(text.shield_typo);
-        }
-
-    },
-
     'slainUsers': function () {
 
         var utc = new Date().toJSON().slice(0,10);
