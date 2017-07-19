@@ -2,8 +2,8 @@
 
 var moment = require('moment-precise-range');
 var text = require('../helpers/text.js');
-var rp = require('request-promise');
 var repo = require('../repositories/lol.js');
+var adapter = require('../adapters/riotgames/lol.js');
 
 
 var self = module.exports = {
@@ -20,16 +20,13 @@ var self = module.exports = {
         }
         server = server.toLowerCase();
         player = player.toLowerCase();
-        self.checkServer(server);
-        rp('https://' + server + '.api.pvp.net/api/lol/' + server + '/v1.4/summoner/by-name/' + player +
-            '?api_key=' + process.env.LOL_KEY
-        ).then(function (text) {
-            return JSON.parse(text);
-        }, function failed(err) {
-            if (-1 !== err.message.indexOf('403')) {
-                throw new Error(text.could_not_access_api);
+        adapter.byName(server, player, {
+            'fail': function failed(err) {
+                if (-1 !== err.message.indexOf('403')) {
+                    throw new Error(text.could_not_access_api);
+                }
+                throw new Error(text.summoner_not_found);
             }
-            throw new Error(text.summoner_not_found);
         }).then(function (summonerData) {
             return {
                 data: summonerData[player.replace(/ /g, '')],
@@ -50,14 +47,6 @@ var self = module.exports = {
             self.lol.send(err.message);
         });
     },
-    checkServer: function(server) {
-        if ('undefined' === typeof server) {
-            throw new Error(text.empty_server);
-        }
-        if (-1 === self.known_servers.indexOf(server.toLowerCase())) {
-            throw new Error(text.unknown_server);
-        }
-    },
-    known_servers: ['na', 'eune', 'euw', 'br', 'kr', 'lan', 'las', 'oce', 'ru', 'tr'],
+
     'lol': {}
 };
