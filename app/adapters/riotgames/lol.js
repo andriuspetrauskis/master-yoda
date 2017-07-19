@@ -5,11 +5,16 @@
 var rp = require('request-promise');
 
 module.exports = {
-    'byName' : function (region, name) {
-        return rp(this.getServerUri(region) + 'summoner/v3/summoners/by-name/' + name + this.getApiKey())
-            .then(function (response) {
+    'byName' : function (region, name, opts) {
+        opts.success = opts.success || function (response) {
                 return JSON.parse(response);
-            });
+        };
+        opts.fail = opts.fail || function (response) {
+                throw Error('Request failed!');
+        };
+
+        return rp(this.getServerUri(region) + 'summoner/v3/summoners/by-name/' + name + this.getApiKey())
+            .then(opts.success, opts.fail);
     },
     'getIdByName': function (region, name) {
         return this.byName(region, name).then(function (data) {
